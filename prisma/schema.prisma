@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  nama       String
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt @db.Timestamp(0)
+  plants     Plant[]
+
+  @@map("users")
+}
+
+model Plant {
+  id            Int          @id @default(autoincrement())
+  user_id       Int
+  nama_tanaman  String
+  jenis         String?
+  tanggal_tanam DateTime?
+  status        String       @default("aktif")
+  foto_url      String?
+  created_at    DateTime     @default(now()) @db.Timestamp(0)
+  updated_at    DateTime     @updatedAt @db.Timestamp(0)
+  user          User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  growth_logs   GrowthLog[]
+
+  @@map("plants")
+}
+
+model GrowthLog {
+  id              Int      @id @default(autoincrement())
+  plant_id        Int
+  tinggi          Float?
+  kondisi_daun    String?
+  kondisi_batang  String?
+  kondisi_akar    String?
+  catatan         String?
+  foto_url        String?
+  tanggal_log     DateTime @default(now())
+  created_at      DateTime @default(now()) @db.Timestamp(0)
+  plant           Plant    @relation(fields: [plant_id], references: [id], onDelete: Cascade)
+
+  @@map("growth_logs")
+}
