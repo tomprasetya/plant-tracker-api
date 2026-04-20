@@ -28,6 +28,7 @@ app.get('/health', (req, res) => {
 // API Routes
 app.use('/api/v1/auth', require('./routes/authRoutes'));
 app.use('/api/v1/plants', require('./routes/plantRoutes'));
+app.use('/api/v1/plants/:plantId/growth-logs', require('./routes/growthLogRoutes'));
 
 // 404 handler
 app.use(notFoundHandler);
